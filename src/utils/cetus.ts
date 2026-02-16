@@ -205,6 +205,7 @@ export class CetusPoolManager {
               hasLiquidity = BigInt(liquidity) > BigInt(0);
             } catch (error) {
               // Fallback to Decimal if BigInt fails
+              console.log(`   ℹ️  BigInt conversion failed, using Decimal fallback for liquidity: ${liquidity}`);
               hasLiquidity = new Decimal(liquidity).gt(0);
             }
             
