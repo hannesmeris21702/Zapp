@@ -1,7 +1,7 @@
 import { Ed25519Keypair } from '@mysten/sui.js/keypairs/ed25519';
 import { SuiClient } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { BotConfig } from '../types';
+import { BotConfig } from '../types/index';
 
 export class SuiWalletManager {
   private keypair: Ed25519Keypair;

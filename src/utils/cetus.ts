@@ -1,5 +1,5 @@
 import { SuiClient } from '@mysten/sui.js/client';
-import { BotConfig, PositionInfo } from '../types';
+import { BotConfig, PositionInfo } from '../types/index';
 import Decimal from 'decimal.js';
 
 export class CetusPoolManager {

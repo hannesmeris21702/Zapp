@@ -1,6 +1,6 @@
-import { BotConfig, PositionInfo, RebalanceDecision } from '../types';
-import { CetusPoolManager } from '../utils/cetus';
-import { calculatePositionDrift } from '../utils/helpers';
+import { BotConfig, PositionInfo, RebalanceDecision } from './types';
+import { CetusPoolManager } from './utils/cetus';
+import { calculatePositionDrift } from './utils/helpers';
 
 export class RebalanceStrategy {
   private config: BotConfig;

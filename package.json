@@ -19,6 +19,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@mysten/sui": "^1.0.0",
     "@mysten/sui.js": "^0.54.1",
     "@cetusprotocol/cetus-sui-clmm-sdk": "^3.6.0",
     "decimal.js": "^10.4.3",
