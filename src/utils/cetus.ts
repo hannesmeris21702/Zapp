@@ -83,6 +83,7 @@ export class CetusPoolManager {
       const positions: PositionInfo[] = [];
       let skippedCount = 0;
       let wrongPoolCount = 0;
+      let missingPoolCount = 0;
 
       for (const obj of ownedObjects.data) {
         if (obj.data && obj.data.content && 'fields' in obj.data.content) {
@@ -94,6 +95,7 @@ export class CetusPoolManager {
             const positionPool = fields.pool;
             if (!positionPool) {
               // Position doesn't have a pool field - skip it
+              missingPoolCount++;
               console.log(`   ⚠️  Position ${obj.data.objectId} missing pool field - skipping`);
               continue;
             }
@@ -124,6 +126,9 @@ export class CetusPoolManager {
       }
 
       // Log filtering statistics for debugging
+      if (missingPoolCount > 0) {
+        console.log(`   ℹ️  Skipped ${missingPoolCount} position(s) with missing pool field`);
+      }
       if (wrongPoolCount > 0) {
         console.log(`   ℹ️  Filtered out ${wrongPoolCount} position(s) from other pools`);
       }
