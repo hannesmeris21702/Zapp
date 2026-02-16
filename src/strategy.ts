@@ -1,6 +1,7 @@
 import { BotConfig, PositionInfo, RebalanceDecision } from './types';
 import { CetusPoolManager } from './utils/cetus';
 import { calculatePositionDrift } from './utils/helpers';
+import Decimal from 'decimal.js';
 
 export class RebalanceStrategy {
   private config: BotConfig;
@@ -12,6 +13,15 @@ export class RebalanceStrategy {
   }
 
   async evaluateRebalance(position: PositionInfo): Promise<RebalanceDecision> {
+    // Skip positions with zero liquidity
+    const liquidity = new Decimal(position.liquidity);
+    if (liquidity.lte(0)) {
+      return {
+        shouldRebalance: false,
+        reason: 'Position has zero liquidity - skipping evaluation',
+      };
+    }
+
     const currentTick = await this.poolManager.getCurrentTick();
     
     // Check if position is out of range

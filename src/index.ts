@@ -3,6 +3,7 @@ import { SuiWalletManager } from './utils/wallet';
 import { CetusPoolManager } from './utils/cetus';
 import { RebalanceStrategy } from './strategy';
 import { sleep, formatTimestamp } from './utils/helpers';
+import Decimal from 'decimal.js';
 
 class CetusRebalanceBot {
   private config;
@@ -84,6 +85,12 @@ class CetusRebalanceBot {
         console.log(`   Liquidity: ${position.liquidity}`);
         console.log(`   Tick Range: [${position.tickLower}, ${position.tickUpper}]`);
         console.log(`   Fees: ${position.feeA} / ${position.feeB}`);
+
+        // Skip positions with zero liquidity
+        if (new Decimal(position.liquidity).lte(0)) {
+          console.log(`\n⚠️  Skipping position with zero liquidity`);
+          continue;
+        }
 
         // Evaluate if rebalance is needed
         const decision = await this.strategy.evaluateRebalance(position);
