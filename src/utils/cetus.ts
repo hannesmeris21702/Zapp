@@ -81,9 +81,9 @@ export class CetusPoolManager {
       });
 
       const positions: PositionInfo[] = [];
-      let skippedCount = 0;
-      let wrongPoolCount = 0;
-      let missingPoolCount = 0;
+      let zeroLiquidityCount = 0;
+      let otherPoolCount = 0;
+      let missingPoolFieldCount = 0;
 
       for (const obj of ownedObjects.data) {
         if (obj.data && obj.data.content && 'fields' in obj.data.content) {
@@ -95,12 +95,11 @@ export class CetusPoolManager {
             const positionPool = fields.pool;
             if (!positionPool) {
               // Position doesn't have a pool field - skip it
-              missingPoolCount++;
-              console.log(`   ⚠️  Position ${obj.data.objectId} missing pool field - skipping`);
+              missingPoolFieldCount++;
               continue;
             }
             if (positionPool !== this.config.poolAddress) {
-              wrongPoolCount++;
+              otherPoolCount++;
               continue;
             }
 
@@ -119,21 +118,21 @@ export class CetusPoolManager {
                 feeB: fields.fee_owed_b || '0',
               });
             } else {
-              skippedCount++;
+              zeroLiquidityCount++;
             }
           }
         }
       }
 
       // Log filtering statistics for debugging
-      if (missingPoolCount > 0) {
-        console.log(`   ℹ️  Skipped ${missingPoolCount} position(s) with missing pool field`);
+      if (missingPoolFieldCount > 0) {
+        console.log(`   ℹ️  Skipped ${missingPoolFieldCount} position(s) with missing pool field`);
       }
-      if (wrongPoolCount > 0) {
-        console.log(`   ℹ️  Filtered out ${wrongPoolCount} position(s) from other pools`);
+      if (otherPoolCount > 0) {
+        console.log(`   ℹ️  Filtered out ${otherPoolCount} position(s) from other pools`);
       }
-      if (skippedCount > 0) {
-        console.log(`   ℹ️  Skipped ${skippedCount} position(s) with zero liquidity`);
+      if (zeroLiquidityCount > 0) {
+        console.log(`   ℹ️  Skipped ${zeroLiquidityCount} position(s) with zero liquidity`);
       }
 
       return positions;
