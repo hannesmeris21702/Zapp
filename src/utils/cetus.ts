@@ -88,16 +88,21 @@ export class CetusPoolManager {
           
           // Check if this is a Cetus position NFT
           if (obj.data.type?.includes('position') || obj.data.type?.includes('Position')) {
-            positions.push({
-              positionId: obj.data.objectId,
-              liquidity: fields.liquidity || '0',
-              tickLower: parseInt(fields.tick_lower_index || '0'),
-              tickUpper: parseInt(fields.tick_upper_index || '0'),
-              tokenA: fields.coin_type_a || '',
-              tokenB: fields.coin_type_b || '',
-              feeA: fields.fee_owed_a || '0',
-              feeB: fields.fee_owed_b || '0',
-            });
+            const liquidity = fields.liquidity || '0';
+            
+            // Only include positions with non-zero liquidity
+            if (liquidity !== '0' && new Decimal(liquidity).gt(0)) {
+              positions.push({
+                positionId: obj.data.objectId,
+                liquidity: liquidity,
+                tickLower: parseInt(fields.tick_lower_index || '0'),
+                tickUpper: parseInt(fields.tick_upper_index || '0'),
+                tokenA: fields.coin_type_a || '',
+                tokenB: fields.coin_type_b || '',
+                feeA: fields.fee_owed_a || '0',
+                feeB: fields.fee_owed_b || '0',
+              });
+            }
           }
         }
       }

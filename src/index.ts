@@ -85,6 +85,12 @@ class CetusRebalanceBot {
         console.log(`   Tick Range: [${position.tickLower}, ${position.tickUpper}]`);
         console.log(`   Fees: ${position.feeA} / ${position.feeB}`);
 
+        // Skip positions with zero liquidity
+        if (position.liquidity === '0' || parseFloat(position.liquidity) <= 0) {
+          console.log(`\n⚠️  Skipping position with zero liquidity`);
+          continue;
+        }
+
         // Evaluate if rebalance is needed
         const decision = await this.strategy.evaluateRebalance(position);
 
