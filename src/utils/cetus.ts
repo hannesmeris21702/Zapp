@@ -91,7 +91,7 @@ export class CetusPoolManager {
             const liquidity = fields.liquidity || '0';
             
             // Only include positions with non-zero liquidity
-            if (liquidity !== '0' && new Decimal(liquidity).gt(0)) {
+            if (new Decimal(liquidity).gt(0)) {
               positions.push({
                 positionId: obj.data.objectId,
                 liquidity: liquidity,
