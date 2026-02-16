@@ -81,6 +81,9 @@ export class CetusPoolManager {
       });
 
       const positions: PositionInfo[] = [];
+      let zeroLiquidityCount = 0;
+      let otherPoolCount = 0;
+      let missingPoolFieldCount = 0;
 
       for (const obj of ownedObjects.data) {
         if (obj.data && obj.data.content && 'fields' in obj.data.content) {
@@ -88,6 +91,18 @@ export class CetusPoolManager {
           
           // Check if this is a Cetus position NFT
           if (obj.data.type?.includes('position') || obj.data.type?.includes('Position')) {
+            // Filter by pool address - only include positions for the configured pool
+            const positionPool = fields.pool;
+            if (!positionPool) {
+              // Position doesn't have a pool field - skip it
+              missingPoolFieldCount++;
+              continue;
+            }
+            if (positionPool !== this.config.poolAddress) {
+              otherPoolCount++;
+              continue;
+            }
+
             const liquidity = fields.liquidity || '0';
             
             // Only include positions with non-zero liquidity
@@ -102,9 +117,22 @@ export class CetusPoolManager {
                 feeA: fields.fee_owed_a || '0',
                 feeB: fields.fee_owed_b || '0',
               });
+            } else {
+              zeroLiquidityCount++;
             }
           }
         }
+      }
+
+      // Log filtering statistics for debugging
+      if (missingPoolFieldCount > 0) {
+        console.log(`   ℹ️  Skipped ${missingPoolFieldCount} position(s) with missing pool field`);
+      }
+      if (otherPoolCount > 0) {
+        console.log(`   ℹ️  Filtered out ${otherPoolCount} position(s) from other pools`);
+      }
+      if (zeroLiquidityCount > 0) {
+        console.log(`   ℹ️  Skipped ${zeroLiquidityCount} position(s) with zero liquidity`);
       }
 
       return positions;
