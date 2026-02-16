@@ -91,8 +91,13 @@ export class CetusPoolManager {
           // Check if this is a Cetus position NFT
           if (obj.data.type?.includes('position') || obj.data.type?.includes('Position')) {
             // Filter by pool address - only include positions for the configured pool
-            const positionPool = fields.pool || '';
-            if (positionPool && positionPool !== this.config.poolAddress) {
+            const positionPool = fields.pool;
+            if (!positionPool) {
+              // Position doesn't have a pool field - skip it
+              console.log(`   ⚠️  Position ${obj.data.objectId} missing pool field - skipping`);
+              continue;
+            }
+            if (positionPool !== this.config.poolAddress) {
               wrongPoolCount++;
               continue;
             }
