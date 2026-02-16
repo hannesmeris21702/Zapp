@@ -6,8 +6,8 @@ WORKDIR /app
 COPY package*.json ./
 COPY tsconfig.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install all dependencies (including devDependencies for build)
+RUN npm ci
 
 # Copy source code
 COPY src ./src
@@ -15,7 +15,7 @@ COPY src ./src
 # Build TypeScript
 RUN npm run build
 
-# Remove dev dependencies and source files
+# Remove dev dependencies and source files after build
 RUN rm -rf src node_modules && \
     npm ci --only=production
 

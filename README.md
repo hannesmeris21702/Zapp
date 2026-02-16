@@ -117,7 +117,7 @@ Once you're confident with your configuration:
 | `TARGET_UPPER_TICK` | Target upper tick for positions | 10000 | No |
 | `MIN_LIQUIDITY_THRESHOLD` | Minimum liquidity value in USD | 1000 | No |
 | `MAX_SLIPPAGE` | Maximum allowed slippage | 0.01 | No |
-| `GAS_BUDGET` | Gas budget in MIST | 100000000 | No |
+| `GAS_BUDGET` | Gas budget in MIST (0.5 SUI default) | 500000000 | No |
 | `DRY_RUN` | Enable dry run mode | true | No |
 
 ### Understanding Ticks

@@ -36,13 +36,13 @@ export class CetusPoolManager {
       const poolInfo = await this.getPoolInfo();
       
       // Extract current sqrt price from pool
-      // This is a simplified version - actual implementation depends on Cetus SDK structure
+      // Cetus uses Uniswap V3-style pricing: price = (sqrtPrice / 2^96)^2
       if (poolInfo.content && 'fields' in poolInfo.content) {
         const fields = poolInfo.content.fields as any;
         const sqrtPrice = new Decimal(fields.current_sqrt_price || '0');
         
-        // Convert sqrt price to actual price
-        const price = sqrtPrice.pow(2).div(new Decimal(2).pow(128));
+        // Convert sqrt price to actual price using correct formula
+        const price = sqrtPrice.div(new Decimal(2).pow(96)).pow(2);
         return price;
       }
 

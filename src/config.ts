@@ -30,7 +30,7 @@ export function loadConfig(): BotConfig {
     targetUpperTick: parseInt(process.env.TARGET_UPPER_TICK || '10000'),
     minLiquidityThreshold: parseFloat(process.env.MIN_LIQUIDITY_THRESHOLD || '1000'),
     maxSlippage: parseFloat(process.env.MAX_SLIPPAGE || '0.01'),
-    gasBudget: parseInt(process.env.GAS_BUDGET || '100000000'),
+    gasBudget: parseInt(process.env.GAS_BUDGET || '500000000'), // 0.5 SUI - adjust based on operations
     dryRun: process.env.DRY_RUN === 'true',
   };
 }
